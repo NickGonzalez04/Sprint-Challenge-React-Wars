@@ -1,7 +1,20 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from "axios";
 import './App.css';
+import CharacterCard from "./components/character.js";
 
 const App = () => {
+  const [data, setData] = useState([]);
+  console.log("top");
+  useEffect(()=>{
+    console.log("first render")
+    axios.get("https://swapi.co/api/people/")
+    .then(res =>{
+      console.log(res.data.results);
+      setData(res.data.results);
+    });
+  }, []);
+  
   // Try to think through what state you'll need for this app before starting. Then build out
   // the state properties here.
 
@@ -12,6 +25,16 @@ const App = () => {
   return (
     <div className="App">
       <h1 className="Header">React Wars</h1>
+      <div>
+        {data.map(data=>{
+          return(
+        <CharacterCard key={data.name} 
+        name={data.name} 
+        birth_year={data.birth_year} 
+        height={data.height}/>
+          )
+        })}
+      </div>
     </div>
   );
 }
